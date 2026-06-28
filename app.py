@@ -92,12 +92,10 @@ if page == "Loan Prediction":
 
     st.divider()
 
-    # Two-column layout
+    
     left, right = st.columns(2)
 
-    # -------------------------
-    # Personal Information
-    # -------------------------
+   
 
     with left:
 
@@ -133,10 +131,7 @@ if page == "Loan Prediction":
             ["Rural", "Semiurban", "Urban"]
         )
 
-    # -------------------------
-    # Financial Information
-    # -------------------------
-
+    
     with right:
 
         st.subheader("💰 Financial Information")
@@ -172,9 +167,7 @@ if page == "Loan Prediction":
 
     st.divider()
 
-    # -------------------------
-    # Convert Inputs
-    # -------------------------
+    
 
     gender = 1 if gender == "Male" else 0
 
@@ -193,9 +186,6 @@ if page == "Loan Prediction":
     else:
         property_area = 2
 
-    # -------------------------
-    # Predict Button
-    # -------------------------
 
     if st.button("🔍 Predict Loan Status", use_container_width=True):
 
@@ -262,12 +252,10 @@ elif page == "Analytics":
     import pandas as pd
     import plotly.express as px
 
-    # Load the dataset
+    
     data = pd.read_csv("loan_data.csv")
 
-    # -------------------------
-    # Loan Status Pie Chart
-    # -------------------------
+    
     loan_counts = data["Loan_Status"].value_counts()
 
     fig = px.pie(
@@ -278,9 +266,7 @@ elif page == "Analytics":
 
     st.plotly_chart(fig)
 
-    # -------------------------
-    # Property Area Bar Chart
-    # -------------------------
+   
     property_counts = data["Property_Area"].value_counts()
 
     fig = px.bar(
@@ -291,9 +277,6 @@ elif page == "Analytics":
 
     st.plotly_chart(fig)
 
-    # -------------------------
-    # Applicant Income Histogram
-    # -------------------------
     fig = px.histogram(
         data,
         x="ApplicantIncome",
@@ -315,20 +298,14 @@ elif page == "Customer Segments":
     from sklearn.cluster import KMeans
     from sklearn.decomposition import PCA
 
-    # -----------------------------
-    # Load Dataset
-    # -----------------------------
+    
     data = pd.read_csv("loan_data.csv")
 
-    # -----------------------------
-    # Handle Missing Values
-    # -----------------------------
+    
     data.fillna(data.mean(numeric_only=True), inplace=True)
     data.fillna(data.mode().iloc[0], inplace=True)
 
-    # -----------------------------
-    # Convert Text to Numbers
-    # -----------------------------
+    
     encoder = LabelEncoder()
 
     object_columns = data.select_dtypes(include=['object', 'string']).columns
@@ -336,21 +313,14 @@ elif page == "Customer Segments":
     for column in object_columns:
         data[column] = encoder.fit_transform(data[column])
 
-    # -----------------------------
-    # Prepare Features
-    # -----------------------------
+    
     X = data.drop("Loan_Status", axis=1)
 
-    # -----------------------------
-    # Feature Scaling
-    # -----------------------------
+     
     scaler = StandardScaler()
 
     X_scaled = scaler.fit_transform(X)
 
-    # -----------------------------
-    # K-Means Clustering
-    # -----------------------------
     kmeans = KMeans(
         n_clusters=3,
         random_state=42,
@@ -361,9 +331,6 @@ elif page == "Customer Segments":
 
     data["Cluster"] = clusters
 
-    # -----------------------------
-    # PCA for Visualization
-    # -----------------------------
     pca = PCA(n_components=2)
 
     pca_data = pca.fit_transform(X_scaled)
@@ -374,9 +341,7 @@ elif page == "Customer Segments":
         "Cluster": data["Cluster"].astype(str)
     })
 
-    # -----------------------------
-    # Scatter Plot
-    # -----------------------------
+    
     fig = px.scatter(
         plot_df,
         x="PCA1",
@@ -390,9 +355,7 @@ elif page == "Customer Segments":
 
     st.divider()
 
-    # -----------------------------
-    # Cluster Counts
-    # -----------------------------
+    
     st.subheader("📊 Customers in Each Segment")
 
     cluster_counts = data["Cluster"].value_counts().sort_index()
@@ -406,9 +369,6 @@ elif page == "Customer Segments":
 
     st.divider()
 
-    # -----------------------------
-    # Pie Chart
-    # -----------------------------
     fig2 = px.pie(
         cluster_table,
         values="Customers",
@@ -421,9 +381,6 @@ elif page == "Customer Segments":
 
     st.divider()
 
-    # -----------------------------
-    # Cluster Descriptions
-    # -----------------------------
     st.subheader("📌 Cluster Explanation")
 
     st.success("""
