@@ -9,33 +9,23 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-# Load dataset
-data = pd.read_csv("loan_data.csv")
 
-# Fill missing values
+data = pd.read_csv("loan_data.csv")
 data.fillna(data.mean(numeric_only=True), inplace=True)
-data.fillna(data.mode().iloc[0], inplace=True)
-
-# Create encoder
-encoder = LabelEncoder()
-
-# Convert text columns into numbers
+data.fillna(data.mode().iloc[0], inplace=True)
+encoder = LabelEncoder()
 object_columns = data.select_dtypes(include=['object', 'string']).columns
 
 for column in object_columns:
     data[column] = encoder.fit_transform(data[column])
-
-# Display first 5 rows
-print(data.head())
-
-# Separate input and output
+
+print(data.head())
 X = data.drop("Loan_Status", axis=1)
 y = data["Loan_Status"]
 
 print("\nInput shape:", X.shape)
 print("Output shape:", y.shape)
 
-# Split dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
@@ -45,35 +35,26 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 print("Training data shape:", X_train.shape)
 print("Testing data shape:", X_test.shape)
-
-# Feature scaling
+
 scaler = StandardScaler()
 
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-print("Feature scaling completed!")
-
-# Create Logistic Regression model
-model = LogisticRegression()
-
-# Train the model
+print("Feature scaling completed!")
+model = LogisticRegression()
 model.fit(X_train_scaled, y_train)
 
-print("Model trained successfully!")
-
-# Make predictions
+print("Model trained successfully!")
 predictions = model.predict(X_test_scaled)
 
 print("\nFirst 10 predictions:")
 print(predictions[:10])
 
-# Calculate accuracy
 accuracy = accuracy_score(y_test, predictions)
 
 print("\nAccuracy =", accuracy * 100, "%")
-
-# Compare actual vs predicted values
+
 results = pd.DataFrame({
     'Actual': y_test,
     'Predicted': predictions
